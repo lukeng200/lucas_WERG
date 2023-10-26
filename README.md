@@ -1,2 +1,2 @@
 # lucas_WERG
-PhD data
+PhD project and data
