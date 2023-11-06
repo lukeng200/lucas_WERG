@@ -2,26 +2,33 @@
 title: "Statistical analysis"
 author: "Lukman Adeboye Soboyejo"
 date: "2023-10-24"
-output: html_document
+output: word_document
+always_allow_html: true
 ---
 
-```{r setup, include=FALSE}
+
+```{r global_options, include = FALSE}
 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(echo= FALSE)
 
 ```
 
-## Set working directory and read channel data into R
-
+## Retrieving data from github (saved privately) and read channel data into R
 ```{r}
-library(tidyverse)
-setwd( "Z:/wergStaff/Lukman_Soboyejo/too_csv" )
-# getwd( )
-df <- read_csv("all_data.csv")
-names(df)
-# view(df)
 
+# remove all object in r environment
+# rm(list=ls(all=TRUE))
+
+# get the URL for the raw version by clicking on the Raw button displayed above the data (token at the end)
+too_data = read.csv("https://raw.githubusercontent.com/lukeng200/lucas_WERG/main/too_stream_survey.csv?token=GHSAT0AAAAAACJOZ422RQLVKL24AVSJATHIZKIZ55Q",
+                  header = T,sep = ",")
+too_data
+
+# view the data in a nice format with pander or kable
+# knitr::kable(too_data)
+pander::pander( head( too_data ) )
 
 ```
 
