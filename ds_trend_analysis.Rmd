@@ -1,0 +1,487 @@
+---
+title: "Statistical analysis"
+author: "Lukman Adeboye Soboyejo"
+date: "2023-10-24"
+output: word_document
+always_allow_html: true
+---
+
+```{r global_options, include = FALSE}
+
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(echo= FALSE)
+
+```
+
+# statistical analysis
+## Retrieving data from github and read channel data into R
+```{r }
+
+# remove all object in r environment
+# rm(list=ls(all=TRUE))
+
+# get the URL by clicking on the raw button displayed the data 
+( too_data = read.csv("https://raw.githubusercontent.com/lukeng200/lucas_WERG/main/too_stream_survey.csv",
+                  header = T,sep = ",") )
+
+
+# view the data in a nice format with pander or kable
+# knitr::kable(too_data)
+pander::pander( head( too_data ) )
+
+```
+
+## theme for visualisation
+```{r}
+
+require(ggplot2)
+theme_clean <- function(){
+  theme_bw()+
+  theme(axis.text.x = element_text(size = 12, angle = 45, vjust = 1, hjust = 1),
+        axis.text.y = element_text(size = 12),
+        axis.title.x = element_text(size = 14, face = "plain"),             
+        axis.title.y = element_text(size = 14, face = "plain"),             
+        panel.grid.major.x = element_blank(),                                          
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.y = element_blank(),  
+        plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), units = , "cm"),
+        plot.title = element_text(size = 12, vjust = 1, hjust = 0.5),
+        legend.text = element_text(size = 12, face = "italic"),
+        legend.direction = "vertical",
+        legend.position = c( 0.3, 0.7 ) )
+}
+
+```
+
+# From distribution to linear model
+```{r}
+
+# explore the data
+# partition the data into 2 rows and 2 columns
+par( mfrow = c( 2, 2 ) )
+
+names(too_data)
+# check the distribution of predictor
+hist( too_data$ei )
+hist( log( too_data$ei ) )
+
+# check the distribution of response
+hist( too_data$bkf_A )
+hist( log(too_data$bkf_A ) )
+
+```
+
+## classical hydraulic geometry model
+-   classical hydraulic geometry model
+-   relates channel dimensions to catchment area
+
+## predictive model summary
+- Model outputs and interpretation
+- Call: a reminder of your model
+- Coefficients: estimates (and their error) for each factor level
+- Intercept is the mean for the first factor level
+- Multiple R2: variance explained by predictors (adjusted r2 also)
+- Difference considered significant when p \< 0.05
+
+```{r }
+
+# note that the CA is the effective catchment
+# classical hydraulic geometry model
+basic_model <- lm( log( bkf_A ) ~ log( CA ), data = too_data )
+summary( basic_model )
+
+# try with ei
+basic_model2 <- lm( log( bkf_A ) ~ log( ei ), data = too_data )
+summary( basic_model2  )
+
+# CA vs. ei - strong correlation
+( ggplot( too_data, aes( log( CA ) , log( ei ) ) ) +
+  geom_line( ) +
+  geom_point( colour = "red", size = 3 ) +
+  theme_clean( ) )
+
+###############################################################################
+# more on model summary
+# CA and ei
+use_CA_ei <- lm( log( bkf_A ) ~ log(CA) + log( ei ), data = too_data )
+summary( use_CA_ei )
+
+# difference at outfalls
+# pos = sections of measurement, i.e., upstream, downstream, upstream-downstream)
+us_ds <- lm( log( bkf_A ) ~ log(CA) + log( ei ) + pos, data = too_data )
+summary( add.outfall )
+
+```
+
+
+## boxplot of the data
+```{r}
+
+# factor out the upstream and downstream section of the stream
+# pos = downstream and upstream position
+
+too_data$pos <- as.factor( too_data$pos )
+
+str(too_data)
+
+( pos <-ggplot( too_data, aes( pos, log(bkf_A) ) ) +
+      geom_point( ) +
+      geom_boxplot( fill = "#CD3333", alpha = 0.8, colour = "#8B2323",
+                    position = position_dodge( width = 0.9 ) ) +
+      theme_clean( ) +  
+      labs( title = "downstream vs upstream of outfalls", x = "outfalls section", y = "log(bkf_A)" ) )
+
+```
+
+```{r}
+# factor out the transects
+# out_L = transects locations
+too_data$out_L <- factor(  too_data$out_L, 
+                     c( "us_hx1", "ds_hx1",
+                        "us_hx2", "hx2ds_3us", "hx3ds_4us" ,"hx4ds_5us", "ds_hx5",
+                        "us_hx6", "ds_hx6",
+                        "us_hx7", "ds_hx7",
+                        "us_hx8", "hx8ds_9us", "ds_hx9",
+                        "us_hx10", "ds_hx10",
+                        "us_hx11",  "ds_hx11",
+                        "us_hx12", "ds_hx12",
+                        "us_hx13", "ds_hx13",
+                        "us_hx14", "ds_hx14",
+                        "us_hx15", "ds_hx15" ) )
+
+( out_L <- ggplot( too_data, aes( out_L, log( bkf_A ) ) ) +
+    geom_point(  ) +
+    geom_boxplot( color = "black", alpha = 0.8, 
+                  fill = c( "green", "#C79471",
+                            "green", "#C79471", "#C79471" ,"#C79471", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471",
+                            "green", "#C79471" ),
+                  position = position_dodge( width = 0.9 ) ) +
+    theme.clean( ) + 
+    theme (
+      plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+      panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" )
+    ) +
+    stat_summary(
+    fun.y = median,
+    geom = 'line',
+    aes( group = -1 ),
+    position = position_dodge(width = 0.9) ) + 
+    theme( axis.text.x = element_text( size = 12, angle = 90 ) ) +
+    labs( title = "Before-vs-After at Sites", x = "Surveyed Transects", y = "log(Channnel Area)" ) )
+
+```
+
+
+```{r}
+# factor out based on sites
+too_data$site <- factor(too_data$site, 
+                   c( "site_1", "site_2","site_3", "site_4", "site_5" ,
+                      "site_6", "site_7", "site_8", "site_9","site_10", 
+                      "site_11" ) )
+
+( site <- ggplot( too_data, aes( site, log( bkf_A ) ) ) +
+    geom_boxplot( fill = "#43CD80", alpha = 0.8, colour = "#43CD80",
+                  position = position_dodge( width = 0.9 ) ) +
+    geom_point( ) +
+    theme.clean( ) +
+    theme (
+    plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+    panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" )
+  ) +    
+    stat_summary(
+    fun.y = median,
+    geom = 'line',
+    aes( group = -1 ),
+    position = position_dodge(width = 0.9) ) +
+    theme( axis.text.x = element_text( size = 12, angle = 90 ) ) +
+    labs( title = "Sites", x = "Sites", y = "log(Channel Area)" ) )
+
+
+require( plotly ) # for interactive plot
+# ggplotly(pos)
+# ggplotly(site)
+# ggplotly(out_L)
+
+
+require( patchwork ) # for combining plots
+setwd( "Z:/wergStaff/Lukman_Soboyejo/plots" )
+png("all_boxplot.png", width = 8, height = 10, units = "in", res = 300)
+(out_L ) / ( site ) 
+
+dev.off( )
+
+```
+
+
+stopped here
+-   bkf_A looks pretty similar across sites, at u/s vs d/s section, and most transects
+-   You can check for bankfull width and depth too??
+-   Although, there is a trend as we move downstream of the catchment area and effective area
+-   Overlaps (see the figures)
+
+```{r}
+
+# - looking at the boxplot, larger channel capcity at larger CA
+# - is this actually true - run a linear model to check this
+fct_pos.lm <- lm( log( bkf_A ) ~ fct_pos, data = df )
+summary( fct_pos.lm )
+
+fct_site.lm <- lm( log( bkf_A ) ~ fct_site, data = df )
+summary( fct_site.lm )
+
+fct_out_L.lm <- lm( log( bkf_A ) ~ fct_out_L, data = df )
+summary( fct_out_L.lm )
+
+```
+
+# BOXPLOT WITH X AND Y CONTINOUS PREDICTORS
+
+```{r}
+
+scaleFUN <- function(x) sprintf("%.2f", as.numeric(x))
+
+# factoring out based on sites
+too_data$fct_ei <- factor( log( too_data$ei ) )
+fct_ei <- ggplot( df, aes( fct_ei, log( bkf_A ) ) ) +
+    geom_boxplot( fill = "#CD3333", alpha = 0.8, colour = "#8B2323",
+                  position = position_dodge( width = 0.9 ) ) +
+    geom_point ( ) +
+    stat_summary(
+    fun.y = median,
+    geom = 'line',
+    aes( group = -1 ),
+    position = position_dodge(width = 0.9) ) +
+    theme.clean( ) +  
+    theme( axis.text.x = element_text( size = 12, angle = 90 ) ) +
+    labs( x = "log(ei_2022)", y = "log(bkf_A)" ) +
+    scale_y_continuous( labels = scales::number_format(accuracy = 0.01,
+                                 decimal.mark = ',')) +
+    scale_x_discrete( labels = scaleFUN )
+  
+# fct_ei
+
+
+df$fct_CA <- factor(log ( df$CA ) )
+fct_CA <- ggplot( df, aes( fct_CA, log( bkf_A ) ) ) +
+    geom_boxplot( fill = "#CD3333", alpha = 0.8, colour = "#8B2323",
+                  position = position_dodge( width = 0.9 ) ) +
+    geom_point ( ) +
+    stat_summary(
+    fun.y = median,
+    geom = 'line',
+    aes( group = -1 ),
+    position = position_dodge(width = 0.9) ) +
+    theme.clean( ) +  
+    theme( axis.text.x = element_text( size = 12, angle = 90 ) ) +
+    labs( x = "log(CA)", y = "log(bkf_A)" ) +
+    scale_y_continuous( labels = scales::number_format(accuracy = 0.01,
+                                 decimal.mark = ',')) +
+    scale_x_discrete( labels = scaleFUN )
+
+ggplotly(fct_ei)
+ggplotly(fct_CA)
+
+```
+
+-   You can check for other response too??
+
+# LOOKING AT PLOTS PRIOR TO LINEAR MIXED EFFECT MODEL
+
+-   each site of measurement have different categories within them, i.e., pool and riffle
+
+```{r}
+
+us_ds <- ggplot( df, aes( x = log(ei_2022), y = log( bkf_A ) ) ) +
+    geom_point( aes( colour = pos ) ) +
+    labs( x = "log(ei_2022)", y = "log(bkf_A)" ) +
+    geom_smooth( method = "lm", formula = 'y ~ x', se = FALSE, 
+                 aes( fill = pos, colour = pos ) ) +    
+    scale_colour_manual( values = c( "#FFC125", "#36648B", "#00FF00" ) ) +
+    scale_fill_manual( values = c( "#FFC125", "#36648B", "#00FF00" ) ) +
+    theme.clean( ) +  
+    theme( axis.text.x = element_text( size = 12, angle = 90 ),
+           legend.position='bottom' )
+us_ds
+
+pool_riffle <- ggplot( df, aes( x = log(ei_2022), y = log( bkf_A ) ) ) +
+    geom_point( aes( colour = xs_N ) ) +
+    labs( x = "log(ei_2022)", y = "log(bkf_A)" ) +
+    geom_smooth( method = "lm", formula = 'y ~ x', se = FALSE, 
+                 aes( fill = xs_N, colour = xs_N ) ) +    
+    scale_colour_manual( values = c( "#FFC125", "#36648B" ) ) +
+    scale_fill_manual( values = c( "#FFC125", "#36648B" ) ) +
+    theme.clean( ) +  
+    theme( axis.text.x = element_text( size = 12, angle = 90 ),
+           legend.position='bottom' )
+pool_riffle
+
+pool_riffle_xs <- ggplot( df, aes( x = log(ei_2022), y = log( bkf_A ) ) ) +
+    geom_point( aes( colour = xs_CN ) ) +
+    labs( x = "log(ei_2022)", y = "log(bkf_A)" ) +
+    geom_smooth( method = "lm", formula = 'y ~ x', se = FALSE, 
+                 aes( fill = xs_CN, colour = xs_CN ) ) +    
+    scale_colour_manual( values = c( "red", "red", "red", "yellow", "yellow", 
+                                     "#DBE9AA","#DBE9AA", "green", "green" ) ) +
+    scale_fill_manual( values = c( "red", "red", "red", "yellow", "yellow",
+                                     "#DBE9AA","#DBE9AA", "green", "green"  ) ) +
+    theme.clean( ) +  
+    theme( axis.text.x = element_text( size = 12, angle = 90 ),
+           legend.position='bottom' )
+pool_riffle_xs
+
+# ggplotly( fct_ei2 )
+
+```
+
+## run multiple view
+
+```{r}
+# ( split_plot <- ggplot( df, aes( x = log(ei_2022), y = log( bkf_A ) ) ) + 
+#   geom_point() + 
+#   facet_wrap( ~ xs_CN ) + 
+#   xlab( "log(ei_2022)" ) + 
+#   theme.clean( ) + 
+#   ylab( "log( bkf_A )" ) )
+# 
+# 
+# ggplot( df, aes( x = log(CA ), y = log( ei_2022 ) ) ) + 
+#   geom_point()
+# 
+# 
+# scaleFUN <- function(x) sprintf("%.2f", as.numeric(x))
+# 
+# # factoring out based on sites
+# df$fct_ei <- factor( log( df$ei_2022 ) )
+# fct_ei <- ggplot( df, aes( fct_ei, log( bkf_A ) ) ) +
+#     geom_boxplot( fill = "#CD3333", alpha = 0.8, colour = "#8B2323",
+#                   position = position_dodge( width = 0.9 ) ) +
+#     geom_point ( ) +
+#     stat_summary(
+#     fun.y = median,
+#     geom = 'line',
+#     aes( group = -1 ),
+#     position = position_dodge(width = 0.9) ) +
+#     theme.clean( ) +  
+#     theme( axis.text.x = element_text( size = 12, angle = 90 ) ) +
+#     labs( x = "log(ei_2022)", y = "log(bkf_A)" ) +
+#     scale_y_continuous( labels = scales::number_format(accuracy = 0.01,
+#                                  decimal.mark = ',')) +
+#     scale_x_discrete( labels = scaleFUN )
+
+
+
+(riffle <- ggplot( too_data, aes(x =  log(ei) , y =  log(riffle_D)  )  ) +
+  geom_point( data = filter( too_data, xs_N == "riffle" )  ) +
+  geom_smooth( data = filter( too_data, xs_N == "riffle" ),
+               method = "lm", se = FALSE, formula = 'y ~ x',
+               aes(colour = "red")  ) + 
+   theme.clean( ) +
+  scale_colour_manual(name = "", values = c( "black" ) ) +
+    theme (
+    plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+    panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" ),
+    legend.position = "none"
+  ) + 
+       ylim( 2, 5) +
+   labs( title = "Riffle Spacing" , x = " log( Impervious cover )",
+        y  = "log( Riffle Spacing )", subtitle = "" ) )
+
+( pool <- ggplot( too_data, aes(x =  log(ei) , y =  log(pool_D)  )  ) +
+  geom_point( data = filter( too_data, xs_N == "pool" )  ) +
+  geom_smooth( data = filter( too_data, xs_N == "pool" ),
+               method = "lm", se = FALSE, formula = 'y ~ x',
+               aes(colour = "red")  ) + 
+    theme.clean( ) +
+    theme (
+    plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+    panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" ),
+    legend.position = "none"
+  ) +
+    ylim( 2, 5) +
+  scale_colour_manual(name = "", values = c( "black" ) ) +
+  theme(legend.position = "none") + labs( title = "Pool Spacing" , x = " log( Impervious cover )",
+        y  = "log( Pool Spacing )", subtitle = "" ) )
+
+( lwd <- ggplot( too_data, aes(x =  log(ei) , y =  log(lwd_N)  )  ) +
+  geom_point(   ) +
+  geom_smooth( method = "lm", se = FALSE, formula = 'y ~ x',
+               aes(colour = "red")  ) +
+  theme.clean( ) +  
+  theme (
+  plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+  panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" ),
+  legend.position = "none"
+) +   
+  scale_colour_manual(name = "", values = c( "black" ) ) +
+  theme(legend.position = "none") + labs( title = "Woody Debris Count" , x = " log( Impervious cover )",
+        y  = "log( Large Woody Count )", subtitle = "" ) )
+
+
+require( patchwork ) # for combining plots
+setwd( "Z:/wergStaff/Lukman_Soboyejo/plots" )
+png("all_PR.png", width = 8, height = 10, units = "in", res = 300)
+(pool | riffle ) / ( lwd ) 
+
+dev.off( )
+
+
+```
+```{r}
+
+(mx_riffle <- ggplot( too_data, aes(x =  log(ei) , y =  log(mx_D)  )  ) +
+  geom_point( data = filter( too_data, xs_N == "riffle" )  ) +
+  geom_smooth( data = filter( too_data, xs_N == "riffle" ),
+               method = "lm", se = FALSE, formula = 'y ~ x',
+               aes(colour = "black")  ) + 
+     theme.clean( ) + 
+    theme (
+    plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+    panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" ),
+    legend.position = "none"
+  ) +   
+  scale_colour_manual(name = "", values = c( "black" ) ) +
+  theme(legend.position = "none") + labs( title = "Riffle Depth" , x = " log( Impervious cover )",
+        y  = "log( Riffle Depth )", subtitle = "" ) )
+
+( mx_pool <- ggplot( too_data, aes(x =  log(ei) , y =  log(mx_D)  )  ) +
+  geom_point( data = filter( too_data, xs_N == "pool" )  ) +
+  geom_smooth( data = filter( too_data, xs_N == "pool" ),
+               method = "lm", se = FALSE, formula = 'y ~ x',
+               aes(colour = "black")  ) + 
+      theme.clean( ) + 
+    theme (
+    plot.background = element_rect(fill = "#E4E4E4", colour = "#E4E4E4"),
+    panel.background = element_rect(fill = "#fafafa", colour = "#E4E4E4" ),
+    legend.position = "none"
+  ) +     
+  scale_colour_manual(name = "", values = c( "black" ) ) +
+  theme(legend.position = "none") + labs( title = "Pool Depth" , x = " log( Impervious cover )",
+        y  = "log( Pool Depth )", subtitle = "" ) )
+
+
+require( patchwork ) # for combining plots
+setwd( "Z:/wergStaff/Lukman_Soboyejo/plots" )
+png("all_mxPR.png", width = 8, height = 8, units = "in", res = 300)
+(mx_riffle ) / ( mx_pool ) 
+```
+
+
+```{r}
+
+( ggplot( too_data, aes( log(ds_CA)  , log(ds_ei) ) ) +
+  geom_line( ) +
+  geom_point( colour = "red", size = 3 ) +
+  theme_clean( ) )
+
+```
+
