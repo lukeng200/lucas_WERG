@@ -1,0 +1,85 @@
+---
+title: "hx_11"
+author: "Lukman Adeboye Soboyejo"
+date: "2023-12-09"
+output: word_document
+always_allow_html: true
+---
+
+```{r global_options, include = TRUE}
+
+knitr::opts_chunk$set(warning = TRUE, message = TRUE) 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(echo= TRUE)
+
+```
+
+
+## read data into r
+```{r}
+hx_1 <- read.csv( "Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/data/hx_1.csv" )
+```
+
+## packages
+```{r}
+
+require(png)
+require(tidyverse)
+
+```
+
+
+#t-test
+- none
+```{r}
+
+# We used a two-sided alternative hypothesis.
+# We tested whether or not the true difference in means was equal to zero.
+# We used a two sample t-test, not a paired t-test.
+# We didn’t make the assumption that the variances were equal between the groups.
+# We used a 95% confidence level.
+
+# view(all_data)
+mx_D1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'mx_D' ) 
+mx_D2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'mx_D' ) 
+# t.test(mx_D1, mx_D2)
+
+avg_D1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'avg_D' ) 
+avg_D2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'avg_D' ) 
+# t.test(avg_D1, avg_D2)
+
+bkf_W1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'bkf_W' ) 
+bkf_W2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'bkf_W' ) 
+# t.test(bkf_W1, bkf_W2)
+
+bkf_A1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'bkf_A' ) 
+bkf_A2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'bkf_A' ) 
+# t.test(bkf_A1, bkf_A2)
+
+wd_R1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'wd_R' ) 
+wd_R2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'wd_R' ) 
+# t.test(wd_R1, wd_R2)
+
+cd_R1 <- all_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'cd_R' ) 
+cd_R2 <- all_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'cd_R' ) 
+# t.test(cd_R1, cd_R2)
+
+lwd_N1 <- in_channel_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'lwd_N' ) 
+lwd_N2 <- in_channel_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'lwd_N' ) 
+# t.test(lwd_N1, lwd_N2)
+
+# riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'riffle_D' ) 
+# riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'riffle_D' ) 
+# t.test(riffle_D1, riffle_D2)
+
+# pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'pool_D' ) 
+# pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'pool_D' ) 
+# t.test(pool_D1, pool_D2)
+
+# bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx11'  ) %>% select( 'Bars' ) 
+# bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx11'  ) %>% select( 'Bars' ) 
+# # t.test(bar_D1, bar_D2)
+
+# https://www.statology.org/interpret-t-test-results-in-r/
+
+```   

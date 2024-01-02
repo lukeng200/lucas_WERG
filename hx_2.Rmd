@@ -1,0 +1,437 @@
+---
+title: "hx_2"
+author: "Lukman Adeboye Soboyejo"
+date: "2023-12-09"
+output: word_document
+always_allow_html: true
+---
+
+```{r global_options, include = TRUE}
+
+knitr::opts_chunk$set(warning = TRUE, message = TRUE) 
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(echo= TRUE)
+
+```
+
+
+## read data into r
+```{r}
+
+hx_2 <- read.csv( "Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/data/hx_2.csv" )
+
+```
+
+## packages
+```{r}
+
+library(png)
+
+```
+
+
+##t-test
+- none is signif.
+```{r}
+# We used a two-sided alternative hypothesis.
+# We tested whether or not the true difference in means was equal to zero.
+# We used a two sample t-test, not a paired t-test.
+# We didn’t make the assumption that the variances were equal between the groups.
+# We used a 95% confidence level.
+
+# view(all_data)
+mx_D1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'mx_D' ) 
+mx_D2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'mx_D' ) 
+# t.test(mx_D1, mx_D2)
+
+avg_D1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'avg_D' ) 
+avg_D2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'avg_D' ) 
+# t.test(avg_D1, avg_D2)
+
+bkf_W1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'bkf_W' ) 
+bkf_W2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'bkf_W' ) 
+# t.test(bkf_W1, bkf_W2)
+
+bkf_A1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'bkf_A' ) 
+bkf_A2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'bkf_A' ) 
+# t.test(bkf_A1, bkf_A2)
+
+wd_R1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'wd_R' ) 
+wd_R2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'wd_R' ) 
+# t.test(wd_R1, wd_R2)
+
+cd_R1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'cd_R' ) 
+cd_R2 <- all_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'cd_R' ) 
+# t.test(cd_R1, cd_R2)
+
+lwd_N1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'lwd_N' ) 
+lwd_N2 <- in_channel_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'lwd_N' ) 
+# t.test(lwd_N1, lwd_N2)
+
+# riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'riffle_D' ) 
+# riffle_D2 <- in_channel_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'riffle_D' ) 
+# # t.test(riffle_D1, riffle_D2)
+# 
+# pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'pool_D' ) 
+# pool_D2 <- in_channel_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'pool_D' ) 
+# # t.test(pool_D1, pool_D2)
+# 
+# bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'Bars' ) 
+# bar_D2 <- in_channel_data %>% filter( out_L == 'hx2ds_3us'  ) %>% select( 'Bars' ) 
+# t.test(bar_D1, bar_D2)
+
+# https://www.statology.org/interpret-t-test-results-in-r/
+
+```
+
+
+
+# Upstream
+
+
+## u/s_8
+```{r}
+
+## UPHIST8 
+plot( hx_2[1:38 , ]$bkf_W ,
+      hx_2[1:38 , ]$bkf_D ,
+      type = "b" , main = "up_x8 riffle hist" , 
+      col= ifelse( hx_2[ 1:38 , ]$pos == "bkf"  , "red" , "black" ) ,
+      pch = ifelse( hx_2[ 1:38 , ]$pos == "bkf"   , 16 , 1 ) ,
+      cex = ifelse( hx_2[ 1:38 , ]$pos == "bkf"   , 1 , 1 ) )
+polygon(hx_2[8:24 , ]$bkf_W, hx_2[8:24 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[8:24  , ]$bkf_W , hx_2[8:24  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_v.png')
+rasterImage(img, xleft = 3, xright = 19, ybottom = -2.5, ytop = 0)
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 20, xright = 31, ybottom = -2.5, ytop = 0)
+arrows(x0 = 15, y0 = -1, x1 = 20, y1 = -1, length = 0.1, col = 'red', angle = 30, code = 3)
+
+```
+
+## u/s_7
+- some deposition on the left
+```{r}
+
+plot( hx_2[39:82 , ]$bkf_W ,
+      hx_2[39:82 , ]$bkf_D ,
+      type = "b" , 
+      main = "up_x7 pool hist" , 
+      col= ifelse( hx_2[39:82 , ]$pos == "bkf"  , "red" , "black" ) ,
+      pch = ifelse( hx_2[39:82 , ]$pos == "bkf"   , 16 , 1 ) ,
+      cex = ifelse( hx_2[39:82 , ]$pos == "bkf"   , 1 , 1 ) 
+      )
+polygon(hx_2[56:70 , ]$bkf_W, hx_2[56:70 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[56:70 , ]$bkf_W , hx_2[56:70 , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_v.png')
+rasterImage(img, xleft = 2.5, xright = 17, ybottom = -3, ytop = 0)
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 17, xright = 26, ybottom = -2.5, ytop = 0)
+arrows(x0 = 13, y0 = -1, x1 = 17, y1 = -1, length = 0.1, col = 'red', angle = 30, code = 3)
+
+```
+
+## u/s_6
+- choke with in-channel vegetation, denoting shallow bed or riffle
+```{r}
+## UPHIST6 & UPbkf6
+plot( hx_2[83:127 , ]$bkf_W , 
+      hx_2[83:127 , ]$bkf_D,
+      type = "b", 
+      main = "up_x6 riffle hist" , 
+      col= ifelse( hx_2[83:127 , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[83:127 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[83:127 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+  polygon(hx_2[100:109 , ]$bkf_W, hx_2[100:109 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[100:109  , ]$bkf_W , hx_2[100:109  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 9, xright = 18, ybottom = -2.5, ytop = 0)
+
+```
+
+##u/s_5
+- slump of bank at the top-right
+```{r}
+## UPHIST5 & UPbkf5
+
+plot( hx_2[128:163 , ]$bkf_W , 
+      hx_2[128:163 , ]$bkf_D,
+      type = "b" , 
+      main = "up_x5 pool hist" ,      
+      col= ifelse( hx_2[128:163 , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[128:163 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[128:163 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[143:152 , ]$bkf_W, hx_2[143:152 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[143:152  , ]$bkf_W , hx_2[143:152  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iv_a.png')
+rasterImage(img, xleft = 0, xright =9, ybottom = -5, ytop = -2)
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 12, xright = 21, ybottom = -3, ytop = -0.5)
+arrows(x0 = 9, y0 = -3, x1 = 13, y1 = -2, length = 0.1, col = 'red', angle = 30, code = 3)
+
+```
+
+
+## u/s_4
+- sediment bar on the left
+- bank slump on the right-end
+```{r}
+## UPHIST4 & UPbkf4
+plot( hx_2[164:212 , ]$bkf_W , 
+      hx_2[164:212  , ]$bkf_D,
+      type = "b", 
+      main = "up_x4 riffle hist" ,      
+      col= ifelse( hx_2[164:212 , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[164:212 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[164:212 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[182:193 , ]$bkf_W, hx_2[182:193 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[182:193  , ]$bkf_W , hx_2[182:193  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_v.png')
+rasterImage(img, xleft = 3, xright = 16, ybottom = -2.5, ytop = 0)
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 14, xright = 22, ybottom = -2, ytop = 0)
+arrows(x0 = 13, y0 = -1, x1 = 15, y1 = -1, length = 0.1, col = 'red', angle = 30, code = 3)
+
+```
+
+## u/s_3 
+- sediment bar at the bottom or sandy bed 
+- high bank because of large wood contributing to more scouring
+```{r}
+## UPHIST3 & UPbkf3
+plot( hx_2[155:180 , ]$bkf_W , 
+      hx_2[155:180  , ]$bkf_D,
+      type = "b" , 
+      main = "up_x3 pool hist" ,      
+      col= ifelse( hx_2[155:180  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[155:180  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[155:180  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[159:169 , ]$bkf_W, hx_2[159:169 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[159:169  , ]$bkf_W , hx_2[159:169  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 4, xright = 11, ybottom = -2, ytop = 1)
+```
+
+## u/s_2
+- funnel-like shape
+```{r}
+## UPHIST2 & UPbkf2
+plot( hx_2[181:206 , ]$bkf_W , 
+      hx_2[181:206 , ]$bkf_D,
+      type = "b" , 
+      main = "up_x2 riffle hist" ,      
+      col= ifelse( hx_2[181:206, ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[181:206 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[181:206 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[187:198 , ]$bkf_W, hx_2[187:198 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[187:198  , ]$bkf_W , hx_2[187:198  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 8, xright = 15, ybottom = -2.5, ytop = 0)
+```
+
+## u/s_1
+- funnel-like shape
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[207:228 , ]$bkf_W , 
+      hx_2[207:228  , ]$bkf_D,
+      type = "b" , 
+      main = "us_x1 pool hist" ,      
+      col= ifelse( hx_2[207:228  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[207:228  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[207:228  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[213:222 , ]$bkf_W, hx_2[213:222 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[213:222  , ]$bkf_W , hx_2[213:222  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (R-L)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 6, xright = 13, ybottom = -2.5, ytop = 0)
+
+```
+
+## d/s 1
+- placement of hardrock and restricted floodplain on the left
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[229:261 , ]$bkf_W , 
+      hx_2[229:261  , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x1 riffle hist" ,      
+      col= ifelse( hx_2[229:261  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[229:261  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[229:261  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[241:254 , ]$bkf_W, hx_2[241:254 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[241:254  , ]$bkf_W , hx_2[241:254  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 6, xright = 13, ybottom = -2.5, ytop = 0)
+
+```
+
+## d/s_2
+- exposed tree and undercutting at the right
+- partially constructed
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[262:288 , ]$bkf_W , 
+      hx_2[262:288  , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x2 pool hist" ,      
+      col= ifelse( hx_2[262:288  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[262:288  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[262:288  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[268:280 , ]$bkf_W, hx_2[268:280 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[268:280  , ]$bkf_W , hx_2[268:280  , ]$bkf_D , type = "b" )
+legend("bottomright", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft =5, xright = 11, ybottom = -3, ytop = 0)
+
+```
+
+## d/s_3
+- exposed tree and undercutting at the right
+- partially restricted
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[289:321 , ]$bkf_W , 
+      hx_2[289:321  , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x3 riffle hist" ,      
+      col= ifelse( hx_2[289:321  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[289:321  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[289:321  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[303:313 , ]$bkf_W, hx_2[303:313 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[303:313  , ]$bkf_W , hx_2[303:313  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 11, ybottom = -3, ytop = 0.2)
+
+```
+
+
+## d/s_4
+- partially restricted on the left
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[322:357 , ]$bkf_W , 
+      hx_2[322:357  , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x4 pool hist" ,      
+      col= ifelse( hx_2[322:357  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[322:357  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[322:357  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[335:347 , ]$bkf_W, hx_2[335:347 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[335:347  , ]$bkf_W , hx_2[335:347  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 11, ybottom = -3, ytop = 0.2)
+
+```
+
+
+## d/s_5
+- partially restricted on the left
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[358:394 , ]$bkf_W , 
+      hx_2[358:394  , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x5 riffle hist" ,      
+      col= ifelse( hx_2[358:394  , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[358:394  , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[358:394  , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[372:385 , ]$bkf_W, hx_2[372:385 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[372:385  , ]$bkf_W , hx_2[372:385  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 11, ybottom = -2.5, ytop = 0.2)
+
+```
+
+
+## d/s_6
+- partially restricted on the left
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[395:432 , ]$bkf_W , 
+      hx_2[395:432 , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x6 pool hist" ,      
+      col= ifelse( hx_2[395:432 , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[395:432 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[395:432 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[409:420 , ]$bkf_W, hx_2[409:420 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[409:420  , ]$bkf_W , hx_2[409:420  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 13, ybottom = -2.7, ytop = 0.2)
+
+```
+
+
+## d/s_7
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[433:468 , ]$bkf_W , 
+      hx_2[433:468 , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x7 riffle hist" ,      
+      col= ifelse( hx_2[433:468 , ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[433:468 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[433:468 , ]$pos == "bkf" , 1 , 1 ) 
+      )
+polygon(hx_2[448:459 , ]$bkf_W, hx_2[448:459 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[448:459  , ]$bkf_W , hx_2[448:459  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 13, ybottom = -2.7, ytop = 0.2)
+
+```
+
+
+
+## d/s_8
+```{r}
+
+## UPHIST1 & UPbkf1
+plot( hx_2[469:505 , ]$bkf_W , 
+      hx_2[469:505 , ]$bkf_D,
+      type = "b" , 
+      main = "ds_x8 pool hist" ,      
+      col= ifelse( hx_2[469:505, ]$pos == "bkf" , "red" , "black" ) ,
+      pch = ifelse( hx_2[469:505 , ]$pos == "bkf" , 16 , 1 ) ,
+      cex = ifelse( hx_2[469:505 , ]$pos == "bkf" , 1 , 1 ) )
+polygon(hx_2[481:494 , ]$bkf_W, hx_2[481:494 , ]$bkf_D, col = rgb(0, 0, 1, alpha = 0.5), border = 'white' )
+lines( hx_2[481:494  , ]$bkf_W , hx_2[481:494  , ]$bkf_D , type = "b" )
+legend("bottomleft", legend ="bankfull stage (L-R)", lty = 2, pch = 16, bty = "n", col = "red", cex = 0.8 )
+img <- readPNG('Z:/wergStaff/Lukman_Soboyejo/r_codes/private_git_stream_data/lucas_WERG/img/stage_iii.png')
+rasterImage(img, xleft = 5, xright = 13, ybottom = -2.7, ytop = 0.2)
+
+```
