@@ -31,7 +31,6 @@ require(tidyverse)
 
 #t-test
 - avg_D is signif.
-- width is signif.
 ```{r}
 
 # We used a two-sided alternative hypothesis.
@@ -63,23 +62,23 @@ wd_R2 <- all_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'wd_R' )
 
 cd_R1 <- all_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'cd_R' ) 
 cd_R2 <- all_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'cd_R' ) 
-t.test(cd_R1, cd_R2)
+# t.test(cd_R1, cd_R2)
 
 lwd_N1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'lwd_N' ) 
 lwd_N2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'lwd_N' ) 
 # t.test(lwd_N1, lwd_N2)
 
-# riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'riffle_D' ) 
-# riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'riffle_D' ) 
-# # t.test(riffle_D1, riffle_D2)
-# 
-# pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'pool_D' ) 
-# pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'pool_D' ) 
+riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'riffle_D' )
+riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'riffle_D' )
+# t.test(riffle_D1, riffle_D2)
+
+pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'pool_D' )
+pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'pool_D' )
 # t.test(pool_D1, pool_D2)
 
-# bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'Bars' ) 
-# bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'Bars' ) 
-# # t.test(bar_D1, bar_D2)
+bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx6'  ) %>% select( 'Bars' )
+bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx6'  ) %>% select( 'Bars' )
+# t.test(bar_D1, bar_D2)
 
 # https://www.statology.org/interpret-t-test-results-in-r/
 

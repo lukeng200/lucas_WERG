@@ -68,17 +68,17 @@ lwd_N1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'lwd_N' 
 lwd_N2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'lwd_N' ) 
 # t.test(lwd_N1, lwd_N2)
 
-# riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'riffle_D' ) 
-# riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'riffle_D' ) 
+riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'riffle_D' )
+riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'riffle_D' )
 # t.test(riffle_D1, riffle_D2)
 
-# pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'pool_D' ) 
-# pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'pool_D' ) 
+pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'pool_D' )
+pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'pool_D' )
 # t.test(pool_D1, pool_D2)
 
-# bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'Bars' ) 
-# bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'Bars' ) 
-# # t.test(bar_D1, bar_D2)
+bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx14'  ) %>% select( 'Bars' )
+bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx14'  ) %>% select( 'Bars' )
+# t.test(bar_D1, bar_D2)
 
 # https://www.statology.org/interpret-t-test-results-in-r/
 

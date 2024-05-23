@@ -38,6 +38,7 @@ library(png)
 # We used a 95% confidence level.
 
 # view(all_data)
+require(tidyverse)
 mx_D1 <- all_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'mx_D' ) 
 mx_D2 <- all_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'mx_D' ) 
 # t.test(mx_D1, mx_D2)
@@ -66,16 +67,16 @@ lwd_N1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'lwd_N' )
 lwd_N2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'lwd_N' ) 
 # t.test(lwd_N1, lwd_N2)
 
-# riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'riffle_D' ) 
-# riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'riffle_D' ) 
-# # t.test(riffle_D1, riffle_D2)
-# 
-# pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'pool_D' ) 
-# pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'pool_D' ) 
-# # t.test(pool_D1, pool_D2)
-# 
-# bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'Bars' ) 
-# bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'Bars' ) 
+riffle_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'riffle_D' )
+riffle_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'riffle_D' )
+# t.test(riffle_D1, riffle_D2)
+
+pool_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'pool_D' )
+pool_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'pool_D' )
+# t.test(pool_D1, pool_D2)
+
+bar_D1 <- in_channel_data %>% filter( out_L == 'us_hx2'  ) %>% select( 'Bars' )
+bar_D2 <- in_channel_data %>% filter( out_L == 'ds_hx5'  ) %>% select( 'Bars' )
 # t.test(bar_D1, bar_D2)
 
 # https://www.statology.org/interpret-t-test-results-in-r/
